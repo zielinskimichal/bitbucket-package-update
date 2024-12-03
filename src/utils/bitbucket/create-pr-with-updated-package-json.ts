@@ -1,15 +1,20 @@
 import { createCommit } from './create-commit';
-import { RepoContext } from './types';
+import { PullRequestResponse, RepoContext } from './types';
 import { getPackageJson } from './get-package-json';
 import { updatePackageVersionInPackageJson } from './update-package-version-in-package-json';
 import { createBranch } from './create-branch';
 import { createPullRequest } from './create-pr';
 
+interface CreatePrWithUpdatedPackageJsonResponse {
+  branchName: string;
+  pullRequest: PullRequestResponse;
+}
+
 export async function createPrWithUpdatedPackageJson(
   context: RepoContext,
   packageName: string,
   newVersion: string,
-): Promise<any> {
+): Promise<CreatePrWithUpdatedPackageJsonResponse> {
   const packageJson = await getPackageJson(context);
 
   const updatedPackageJson = updatePackageVersionInPackageJson(
@@ -22,7 +27,7 @@ export async function createPrWithUpdatedPackageJson(
 
   const branchName = `update-${packageName}-${timestamp}`;
 
-  await createBranch(context, context.branch, branchName);
+  await createBranch(context, branchName);
 
   await createCommit(
     context,

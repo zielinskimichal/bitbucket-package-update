@@ -13,11 +13,6 @@ export interface RepoContext {
   branch: string;
 }
 
-export interface CommitInfo {
-  hash: string;
-  date: string;
-}
-
 export interface PullRequestResponse {
   id: number;
   title: string;

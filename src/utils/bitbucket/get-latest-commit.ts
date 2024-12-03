@@ -1,4 +1,8 @@
-import { CommitInfo, RepoContext } from './types';
+import { RepoContext } from './types';
+
+interface CommitInfo {
+  hash: string;
+}
 
 export async function getLatestCommit(context: RepoContext): Promise<string> {
   const response = await context.client.get<{ values: CommitInfo[] }>(
