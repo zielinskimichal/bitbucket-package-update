@@ -48,7 +48,7 @@ async function main() {
     args.newVersion,
   );
 
-  console.log('Successfully created PR:', result.pullRequest.links.html.href);
+  console.log('Created a PR:', result.pullRequest.links.html.href);
 }
 
 main();
