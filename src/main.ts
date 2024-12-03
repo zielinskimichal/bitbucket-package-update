@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { BitBucketClient } from './bitbucket-client';
 import { createPrWithUpdatedPackageJson } from './utils';
-import { createSpinner } from './utils/spinner';
+import { createSpinner } from './utils';
 
 interface ScriptArgs {
   packageName: string;
