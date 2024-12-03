@@ -1,6 +1,6 @@
 import { PackageJson } from './types';
 
-export function updatePackageVersion(
+export function updatePackageVersionInPackageJson(
   packageJson: PackageJson,
   packageName: string,
   newVersion: string,

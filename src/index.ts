@@ -1,9 +1,7 @@
+import 'dotenv/config';
 import { Command } from 'commander';
-import dotenv from 'dotenv';
 import { BitBucketClient } from './bitbucket-client';
-import { updatePackageJsonInRepo } from './utils';
-
-dotenv.config();
+import { createPrWithUpdatedPackageJson } from './utils';
 
 const program = new Command();
 
@@ -25,13 +23,13 @@ async function main() {
   try {
     try {
       const context = {
-        client: new BitBucketClient(),
+        client: BitBucketClient.getInstance(),
         workspace: 'tria-day-test',
         repo: 'sample-repo',
-        branch: 'test',
+        branch: 'main',
       };
 
-      const branchName = await updatePackageJsonInRepo(
+      const branchName = await createPrWithUpdatedPackageJson(
         context,
         'axios',
         '1.7.9',
