@@ -1,47 +1,54 @@
 import 'dotenv/config';
-import { Command } from 'commander';
 import { BitBucketClient } from './bitbucket-client';
 import { createPrWithUpdatedPackageJson } from './utils';
 
-const program = new Command();
+interface ScriptArgs {
+  packageName: string;
+  newVersion: string;
+  workspace: string;
+  repo: string;
+  branch: string;
+}
 
-program
-  .name('package-updater')
-  .description('Updates package.json in BitBucket repo and creates a PR')
-  // .requiredOption('-p, --package <name>', 'package name to update')
-  // .requiredOption('-n, --new-version <version>', 'new version to set')
-  // .requiredOption(
-  //   '-r, --repo <repository>',
-  //   'BitBucket repository in format workspace/repo-name',
-  // )
-  .option('-b, --branch <branch>', 'base branch name', 'main')
-  .parse(process.argv);
+function parseArgs(): ScriptArgs {
+  const [, , packageName, newVersion, workspace, repo, branch] = process.argv;
 
-// const options = program.opts();
-
-async function main() {
-  try {
-    try {
-      const context = {
-        client: BitBucketClient.getInstance(),
-        workspace: 'tria-day-test',
-        repo: 'sample-repo',
-        branch: 'main',
-      };
-
-      const branchName = await createPrWithUpdatedPackageJson(
-        context,
-        'axios',
-        '1.7.9',
-      );
-      console.log(branchName);
-    } catch (error) {
-      console.error('Failed to connect to BitBucket:', error);
-    }
-  } catch (error) {
-    console.error('Error:', error);
+  if (!packageName || !newVersion || !workspace || !repo || !branch) {
+    console.error(
+      'Usage: node dist/src/index.js <package-name> <new-version> <workspace> <repo> <branch>',
+    );
+    console.error(
+      'Example: node dist/src/index.js axios 1.7.9 tria-day-test sample-repo main',
+    );
     process.exit(1);
   }
+
+  return {
+    packageName,
+    newVersion,
+    workspace,
+    repo,
+    branch,
+  };
+}
+
+async function main() {
+  const args = parseArgs();
+
+  const context = {
+    client: BitBucketClient.getInstance(),
+    workspace: args.workspace,
+    repo: args.repo,
+    branch: args.branch,
+  };
+
+  const result = await createPrWithUpdatedPackageJson(
+    context,
+    args.packageName,
+    args.newVersion,
+  );
+
+  console.log('Successfully created PR:', result.pullRequest.links.html.href);
 }
 
 main();
