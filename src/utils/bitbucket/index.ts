@@ -6,3 +6,4 @@ export * from './get-package-json';
 export * from './types';
 export * from './update-package-version-in-package-json';
 export * from './create-pr';
+export * from './bitbucket-client';

@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { BitBucketClient } from './bitbucket-client';
+import { BitBucketClient } from './utils';
 import { createPrWithUpdatedPackageJson } from './utils';
 import { createSpinner } from './utils';
 
@@ -40,7 +40,7 @@ async function main() {
   try {
     spinner.start();
     const context = {
-      client: BitBucketClient.getInstance(),
+      client: new BitBucketClient(),
       workspace: args.workspace,
       repo: args.repo,
       branch: args.branch,

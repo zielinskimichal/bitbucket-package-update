@@ -1,10 +1,9 @@
 import axios, { AxiosInstance } from 'axios';
 
 export class BitBucketClient {
-  private static instance: BitBucketClient;
   private client: AxiosInstance;
 
-  private constructor() {
+  constructor() {
     const username = process.env.BITBUCKET_USERNAME;
     const appPassword = process.env.BITBUCKET_APP_PASSWORD;
     const baseUrl =
@@ -27,13 +26,6 @@ export class BitBucketClient {
     });
   }
 
-  public static getInstance(): BitBucketClient {
-    if (!BitBucketClient.instance) {
-      BitBucketClient.instance = new BitBucketClient();
-    }
-    return BitBucketClient.instance;
-  }
-
   async get<T>(path: string): Promise<T> {
     const response = await this.client.get<T>(path);
     return response.data;
@@ -41,11 +33,6 @@ export class BitBucketClient {
 
   async post<T>(path: string, data?: unknown, config?: any): Promise<T> {
     const response = await this.client.post<T>(path, data, config);
-    return response.data;
-  }
-
-  async put<T>(path: string, data?: unknown): Promise<T> {
-    const response = await this.client.put<T>(path, data);
     return response.data;
   }
 }

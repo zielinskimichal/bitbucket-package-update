@@ -1,4 +1,4 @@
-import { BitBucketClient } from '../../bitbucket-client';
+import { BitBucketClient } from './bitbucket-client';
 
 export interface PackageJson {
   dependencies?: Record<string, string>;
