@@ -1,11 +1,5 @@
 import { BitBucketClient } from './bitbucket-client';
 
-export interface PackageJson {
-  dependencies?: Record<string, string>;
-  devDependencies?: Record<string, string>;
-  peerDependencies?: Record<string, string>;
-}
-
 export interface RepoContext {
   client: BitBucketClient;
   workspace: string;

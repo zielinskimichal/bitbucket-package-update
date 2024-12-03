@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { BitBucketClient } from './utils';
-import { createPrWithUpdatedPackageJson } from './utils';
 import { createSpinner } from './utils';
+import { PackageUpdateService } from './utils/bitbucket/package-update-service';
 
 interface ScriptArgs {
   packageName: string;
@@ -54,19 +54,23 @@ async function main() {
 
     spinner.start();
 
-    const result = await createPrWithUpdatedPackageJson(
-      context,
+    const packageUpdateService = new PackageUpdateService(context);
+
+    const result = await packageUpdateService.updatePackage(
       args.packageName,
       args.newVersion,
     );
 
     spinner.stop(true);
-    console.log(`✓ Created a PR: ${result.pullRequest.links.html.href}`);
+
+    console.log(`✓ Created a PR: ${result.links.html.href}`);
   } catch (error) {
     spinner.stop(true);
+
     console.error(
       `✗ Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
     );
+
     process.exit(1);
   }
 }
